@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Exchange Dashboard</title>
+    <style>
+        :root {
+            --bg-base: #FDF8F5; --bg-panel: #F4EBE6; --border: #D1C4BC;
+            --text-main: #3E2A1D; --primary: #8C5A35;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-base);
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
+        }
+        .login-box {
+            background: var(--bg-panel); padding: 40px; border-radius: 8px;
+            border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center; width: 100%; max-width: 320px;
+        }
+        h2 { color: var(--text-main); margin-top: 0; }
+        input {
+            width: 100%; padding: 10px; margin: 15px 0; border: 1px solid var(--border);
+            border-radius: 6px; box-sizing: border-box; font-size: 14px;
+        }
+        button {
+            width: 100%; background-color: var(--primary); color: white; border: none;
+            padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;
+        }
+        button:hover { background-color: #704627; }
+        #errorMsg { color: #B84A4A; font-size: 13px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h2>Access Dashboard</h2>
+    <form id="loginForm">
+        <input type="password" id="password" placeholder="Enter Password" required>
+        <button type="submit">Log In</button>
+        <div id="errorMsg">Incorrect password. Please try again.</div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('errorMsg');
+        
+        // Send password to our Netlify backend function
+        const response = await fetch('/.netlify/functions/login', {
+            method: 'POST',
+            body: JSON.stringify({ password })
+        });
+
+        if (response.ok) {
+            window.location.href = '/dashboard.html'; // Redirect on success
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
